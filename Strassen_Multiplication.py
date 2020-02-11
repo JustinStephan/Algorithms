@@ -9,12 +9,17 @@ def Matrix_Divide(A):
     m = math.ceil(len(A)/2)    
 
     #if the matrix is not even, add a column and row of zeros
-    if m > n:
-        for i in range(0,(len(A))):
-            A = np.append(A,0)#need to add a column and row of zeros
-    #a1 = A[0:2,0:2].copy()
-    #a, b, c, d = np.split(A,4)
-    a,b,c,d = A[:m,:m],A[:m,m:],A[m:,:m],A[m:,m:]
+    if len(A)%2 != 0:
+        
+        #create a column and row of zeros
+        zeRow = np.zeros((1 ,len(A)+1),dtype = int)
+        zeColumn = np.zeros(((len(A)) , 1), dtype = int)
+        #concatenate column and row of zeros to the original matrix
+        Aa = np.concatenate((A, zeColumn), axis=1)
+        Ab = np.concatenate((Aa, zeRow), axis=0)
+        B = Ab    
+    else: B = A    
+    a,b,c,d = B[:m,:m],B[:m,m:],B[m:,:m],B[m:,m:]
     print('a=\n',a)
     print('b=\n',b)
     print('c=\n',c)
