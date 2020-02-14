@@ -1,11 +1,15 @@
 #Program to multiply two matrice of size n*n using the strassen algorithm
-
 import math
 import numpy as np
+
 #Divide the matrices into sub matrices of size n/2 * n/2 until you have 2x2 matrices
 # for n/2 of odd numbers add a row and column of zeroes
 def Matrix_Divide(A):
-    n = len(A)/2
+    # Check to ensure the matrix is square
+    if not len(A) == len(A[0]):
+        return(print('Error: matrix must be of size n*n'))
+
+    #establish the new matrice size of ceiling n/2
     m = math.ceil(len(A)/2)    
 
     #if the matrix is not even, add a column and row of zeros
@@ -20,42 +24,61 @@ def Matrix_Divide(A):
         B = Ab    
     else: B = A    
     a,b,c,d = B[:m,:m],B[:m,m:],B[m:,:m],B[m:,m:]
-    print('a=\n',a)
-    print('b=\n',b)
-    print('c=\n',c)
-    print('d=\n',d)
+    return a,b,c,d
+    
 
 
 #perform multiplication 
-'''
+
 def Strassen_Multiplication(A , B):
-    #Check for matrix size 0f 2*2
+    #Check for matrix size of n*n
     if not len(A) == len(B):
         print('Error: matrices must be the same size')
-    if len(A)/2 > 1:
-        a1 = 
-        a2 = 
-        b1 = 
-        b2 = 
+    #If the matrices are of size 2*2, compute the result
+    if len(A) == 2 and len(B) == 2:
+        #divide the matrix into individual elements
+        a,b,c,d = Matrix_Divide(A)
+        e,f,g,h = Matrix_Divide(B)
+
+        #perform the calculation according to strassens algorithm on the elements
+        p1 = a*(f-h)
+        p2 = (a+b)*h
+        p3 = (c+d)*e
+        p4 = d*(g-e)
+        p5 = (a+d)*(e+h)
+        p6 = (b-d)*(g+h)
+        p7 = (a-c)*(e+f)
+
+        #combine according to strassens algorithm for the resulting array
+        result = np.array([
+            [0,0],
+            [0,0]
+            ])
+        result[0][0] = p5 + p4 - p2 + p6
+        result[0][1] = p1+p2
+        result[1][0] = p3 + p4
+        result[1][1] = p1 + p5 - p3 - p7
+        print(result)
     
-    if not len(A) == 2 and not len(B) == 2:
-        return(print('Error: matrices too big')
-    '''
-'''
-#Get matrix size from user ::DONE
-n=int(input('Enter the integer size of the matrices you would like to multiply.'))
+    '''if not len(A) == 2 and not len(B) == 2:
+        return(print('Error: matrices too big'))'''
+    
+def Get_Arrays():
+    #Get matrix size from user 
+    n = int(input('Enter the integer size of the matrices you would like to multiply.'))
 
 
-#Get matrices values from user ::DONE
-array = [[0 for x in range(n)] for y in range (n)]
-for i in range(0,n):
-    for j in range(0,n):
-        array[i][j]=int(input('Enter a value'))
-'''
+    #Get matrices values from user
+    array = [[0 for x in range(n)] for y in range (n)]
+    for i in range(0,n):
+        for j in range(0,n):
+            array[i][j]=int(input('Enter a value: '))
 
-#A = [[1,2,3],[4,5,6],[7,8,9]]
-#B = [[9,8,7],[6,5,4],[3,2,1]]
-
+# 2*2 sample matrix
+D = np.array([
+    [1,2],
+    [3,4]
+    ])
 # 6*6 sample matrix
 A =np.array([
     [ 1, 2, 3, 4, 5, 6], 
@@ -74,6 +97,16 @@ B =np.array([
     [13,14,15,16,17],
     [19,20,21,22,23]
     ])
-#Strassen_Multiplication(A,B)
 
-Matrix_Divide(B)
+
+# 5*4 SAMPLE MATRIX
+C =np.array([
+    [ 1, 2, 3, 4], 
+    [ 5, 6, 7, 8],
+    [ 9,10,11,12],
+    [13,14,15,16],
+    [19,20,21,22]
+    ])
+Strassen_Multiplication(D,D)
+
+#Matrix_Divide(B)
